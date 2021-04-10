@@ -6,13 +6,18 @@ class HC05:
         self.uart = uart
         self.state = Pin(state, Pin.IN)
         self.en = Pin(en, Pin.OUT)
+        self.en.value(0)
         
     def send_at_cmd(self, cmd, timeout=2000):
         orig_en = self.en.value()
-        self.en.on()
-        self.uart.write(cmd.upper() + '\r\n', timeout)
-        resp = self.wait_ok(timeout)
-        self.en.on() if orig_en else self.en.off()
+        try:
+            self.en.on()
+            utime.sleep_ms(100) # give some time to enter AT mode
+            self.uart.write(cmd.upper() + '\r\n', timeout)
+            resp = self.wait_ok(timeout)
+        finally:
+            self.en.value(orig_en)
+            
         return resp
         
     def wait_ok(self, timeout=2000):
