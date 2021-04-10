@@ -8,10 +8,17 @@ class HC05:
         self.en = Pin(en, Pin.OUT)
         self.en.value(0)
         
+    def get_state(self):
+        resp = self.send_at_cmd('AT+STATE?')
+        try:
+            return resp.split(b':')[1].split(b'\r')[0]
+        except IndexError:
+            return b''
+    
     def send_at_cmd(self, cmd, timeout=2000):
         orig_en = self.en.value()
         try:
-            self.en.on()
+            self.en.value(1)
             utime.sleep_ms(100) # give some time to enter AT mode
             self.uart.write(cmd.upper() + '\r\n', timeout)
             resp = self.wait_ok(timeout)
