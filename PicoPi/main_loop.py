@@ -3,40 +3,44 @@ import time
 
 class Commands:
     def __init__(self, switch):
-        self.switch = switch
+        self._switch = switch
+        self._callable_commands = self._get_commands()
+        print(self._callable_commands)
         
-    def get_commands(self):
+    def __call__(self, command):
+        for c in self._callable_commands:
+            if c.startswith(command):
+                return getattr(self, c)(command)
+        return b'error - unknow command\r\n'
+    
+    def _get_commands(self):
         return [
             m
             for m in dir(self)
-            if not m.startswith('_') and callable(getattr(self, m))
+            if not m.startswith('_')
         ]
         
     def ping(self, cmd):
         return b"pong\r\n"
 
     def on(self, cmd):
-        self.switch.on()
+        self._switch.on()
         return b"on\r\n"
 
     def off(self, cmd):
-        self.switch.off()
+        self._switch.off()
         return b"off\r\n"
     
 
 def main_loop(bt, switch):
     commands = Commands(switch)
-    available_commands = commands.get_commands()
     while True:
         if bt.uart.any():
             cmd = bt.uart.readline().strip()
-            for c in available_commands:
-                if c.startswith(cmd.lower()):
-                    print(cmd)
-                    ret = getattr(commands, c)(cmd)
-                    print(ret)
-                    bt.uart.write(ret)
-                    break
+            print(cmd)
+            ret = commands(cmd)
+            print(ret)
+            bt.uart.write(ret)
                
         print("Waiting ...")
         time.sleep(1)

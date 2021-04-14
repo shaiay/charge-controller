@@ -16,9 +16,10 @@ uart = UART(
 
 # wait a bit so that the EN line would not be high at HC-05 boot
 time.sleep(1)
+bt = HC05(uart, 19)
 
 switch = Pin(20, Pin.OUT)
-bt = HC05(uart, 19)
+switch.on()
 
 main_loop(bt, switch)
 
