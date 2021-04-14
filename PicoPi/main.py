@@ -1,6 +1,7 @@
 from hc05 import HC05
 from machine import UART, Pin
 import time
+from main_loop import main_loop
 
 uart = UART(
     0,
@@ -8,7 +9,7 @@ uart = UART(
     bits=8,
     parity=None,
     stop=1,
-    timeout=200,
+    timeout=2000,
     tx=Pin(16),
     rx=Pin(17),
 )
@@ -16,9 +17,8 @@ uart = UART(
 # wait a bit so that the EN line would not be high at HC-05 boot
 time.sleep(1)
 
+switch = Pin(20, Pin.OUT)
 bt = HC05(uart, 19)
-print(b"BT state: <" + bt.get_state() + b">")
 
-
-
+main_loop(bt, switch)
 
