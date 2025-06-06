@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Charge Controller</string>
+    <string name="scan_for_devices">Scan for Devices</string>
+    <string name="scanning">Scanning...</string>
 </resources>

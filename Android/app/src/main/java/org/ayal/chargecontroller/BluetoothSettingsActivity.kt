@@ -64,13 +64,13 @@ class BluetoothSettingsActivity : AppCompatActivity() {
 
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
                     scanProgressBar.visibility = View.VISIBLE
-                    scanButton.text = "Scanning..."
+                    scanButton.text = getString(R.string.scanning)
                     scanButton.isEnabled = false
                 }
 
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
                     scanProgressBar.visibility = View.GONE
-                    scanButton.text = "Scan for Devices"
+                    scanButton.text = getString(R.string.scan_for_devices)
                     scanButton.isEnabled = true
                 }
             }
@@ -211,7 +211,7 @@ class BluetoothSettingsActivity : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.BLUETOOTH_SCAN
-            ) == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             if (bluetoothAdapter?.isDiscovering == true) {
                 bluetoothAdapter?.cancelDiscovery()
@@ -228,7 +228,7 @@ class BluetoothSettingsActivity : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.BLUETOOTH_SCAN
-            ) == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             bluetoothAdapter?.cancelDiscovery() // Stop discovery before attempting to connect
         }
@@ -248,7 +248,7 @@ class BluetoothSettingsActivity : AppCompatActivity() {
         // For now, let's just finish this activity and pass back the device address
         val resultIntent = Intent()
         resultIntent.putExtra("selected_device_address", device.address)
-        setResult(Activity.RESULT_OK, resultIntent)
+        setResult(RESULT_OK, resultIntent)
         finish()
     }
 
@@ -259,7 +259,7 @@ class BluetoothSettingsActivity : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.BLUETOOTH_SCAN
-            ) == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             bluetoothAdapter?.cancelDiscovery()
         }
