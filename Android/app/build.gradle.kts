@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
     testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("org.mockito:mockito-inline:5.11.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
     testImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation(libs.androidx.junit)
