@@ -24,7 +24,7 @@ import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock // Though `Mockito.mock` is not explicitly used, it's a common pattern.
+// import org.mockito.Mockito.mock // Not strictly needed if not directly calling Mockito.mock()
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -69,7 +69,8 @@ class BluetoothDeviceAdapterTest {
 
         // Static mock for LayoutInflater
         layoutInflaterMockedStatic = Mockito.mockStatic(LayoutInflater::class.java)
-        layoutInflaterMockedStatic?.`when` { LayoutInflater.from(mockContext) }?.thenReturn(mockLayoutInflater)
+        // Corrected line with explicit type argument for 'when'
+        layoutInflaterMockedStatic?.when<LayoutInflater> { LayoutInflater.from(mockContext) }?.thenReturn(mockLayoutInflater)
 
 
         `when`(mockLayoutInflater.inflate(R.layout.item_bluetooth_device, mockViewGroup, false)).thenReturn(mockInflatedView)
