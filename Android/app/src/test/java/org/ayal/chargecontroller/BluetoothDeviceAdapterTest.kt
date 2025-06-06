@@ -51,7 +51,7 @@ class BluetoothDeviceAdapterTest {
     @Mock private lateinit var mockLayoutInflater: LayoutInflater
     @Mock private lateinit var mockInflatedView: View // This is the view returned by inflater
 
-    private var layoutInflaterMockedStatic: MockedStatic<LayoutInflater>? = null
+    private lateinit var layoutInflaterMockedStatic: MockedStatic<LayoutInflater> // Changed to lateinit
 
     @Before
     fun setUp() {
@@ -69,8 +69,8 @@ class BluetoothDeviceAdapterTest {
 
         // Static mock for LayoutInflater
         layoutInflaterMockedStatic = Mockito.mockStatic(LayoutInflater::class.java)
-        // Corrected line with explicit type argument for 'when'
-        layoutInflaterMockedStatic?.when<LayoutInflater> { LayoutInflater.from(mockContext) }?.thenReturn(mockLayoutInflater)
+        // Corrected line: removed ?. and assuming non-null layoutInflaterMockedStatic
+        layoutInflaterMockedStatic.`when`<LayoutInflater> { LayoutInflater.from(mockContext) }.thenReturn(mockLayoutInflater)
 
 
         `when`(mockLayoutInflater.inflate(R.layout.item_bluetooth_device, mockViewGroup, false)).thenReturn(mockInflatedView)
@@ -80,7 +80,10 @@ class BluetoothDeviceAdapterTest {
 
     @After
     fun tearDown() {
-        layoutInflaterMockedStatic?.close()
+        // Check if initialized before closing, matching lateinit behavior
+        if (::layoutInflaterMockedStatic.isInitialized) {
+            layoutInflaterMockedStatic.close()
+        }
     }
 
     @Test
